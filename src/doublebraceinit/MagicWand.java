@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 public class MagicWand {
 
+    private static final int MAGIC_NUMBER = 4;
+
     public void wave(Object o) {
         // It's magic!
     }
@@ -13,8 +15,9 @@ public class MagicWand {
     public Map<String, ?> toMap() {
         try {
             Map<String, Object> result = new TreeMap<>();
-            for (Field field : getClass().getDeclaredFields())
-                result.put(field.getName().substring(4), field.get(this));
+            for (Field field : getClass().getDeclaredFields()) {
+                result.put(field.getName().substring(MAGIC_NUMBER), field.get(this));
+            }
             return result;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
