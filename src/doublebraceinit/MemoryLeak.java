@@ -10,31 +10,16 @@ import java.util.List;
  */
 public final class MemoryLeak {
 
-    static final class BatchProcessor {
-        private final String batchData;
-
-        public BatchProcessor(String batchData) {
-            this.batchData = batchData;
-        }
-
-        public BatchStatistics leakyProcess() {
-            // The inner class referenced by double brace initialization will refer the processor
-            // and make 'batchData' non-reclaimable even though we don't need it anymore.
-            return new BatchStatistics() {{
-                length = batchData.length();
-            }};
-        }
-    }
-
     static class BatchStatistics {
         public int length;
     }
 
-    private static String createBigString(int length) {
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++)
-            sb.append("x");
-        return sb.toString();
+    static BatchStatistics processBatch(byte[] batchData) {
+        // Inner class will keep a reference to batchData and make it
+        // non-reclaimable even though we don't need it after initialization.
+        return new BatchStatistics() {{
+            length = batchData.length;
+        }};
     }
 
     public static void main(String[] args) {
@@ -43,8 +28,8 @@ public final class MemoryLeak {
         for (int i = 0; i < 100_000; i++) {
             if (i % 1000 == 0)
                 System.out.println(i);
-            String data = createBigString(100_000);
-            stats.add(new BatchProcessor(data).leakyProcess());
+
+            stats.add(processBatch(new byte[100_000]));
         }
 
         // We never actually get here because we run out of memory
