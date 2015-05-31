@@ -25,6 +25,7 @@ enlightenment:
     completing if it were not for double brace initialization.
   - [DebugLogging.java](src/doublebraceinit/DebugLogging.java) implements a program that tries to provide useful
     information in `toString()`, only to find out that double brace initialization messes it up.
+  - [MagicWand.java](src/doublebraceinit/MagicWand.java) implements magical maps.
   - [Serialization.java](src/doublebraceinit/Serialization.java) fails at serializing a seemingly serializable class.
 
 While your program might be immune to these (and other) problems right now, are you really willing to make a system
